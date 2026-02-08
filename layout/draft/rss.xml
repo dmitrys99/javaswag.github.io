@@ -32,9 +32,17 @@
       <itunes:duration>{{ .Params.Duration }}</itunes:duration>
       <itunes:author>{{ .Site.Params.ItunesAuthor }}</itunes:author>
       <itunes:explicit>no</itunes:explicit>
-      <itunes:summary>{{ .Content | plainify}}</itunes:summary> <!-- {{ .Content | html }} -->
-      {{$subtitle := .Content | plainify}}<itunes:subtitle>{{ substr $subtitle 0 50}}...</itunes:subtitle> <!-- {{ .Summary | html }} --> 
-      <description>{{ .Content | plainify}}</description> <!-- {{ .Content | html }} -->
+      <itunes:summary>
+        {{ printf "<![CDATA[" | safeHTML }}
+            {{ .Content | safeHTML }}
+        {{- printf "]]>" | safeHTML }}
+      </itunes:summary>
+      {{$subtitle := .Content | plainify}}<itunes:subtitle>{{ substr $subtitle 0 50}}...</itunes:subtitle>
+      <description>
+        {{ printf "<![CDATA[" | safeHTML }}
+            {{ .Content | safeHTML }}
+        {{- printf "]]>" | safeHTML }}
+      </description>
       <enclosure url="{{$.Site.Params.yandexS3}}{{ .Params.Audio }}" type="audio/mpeg" length="{{ .Params.Size }}"/>
       <itunes:image href="{{ .Site.BaseURL }}/{{ $.Site.Params.ImageDraft }}" />
       <author>{{ .Site.Params.ItunesAuthor }}</author>
